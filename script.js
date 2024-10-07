@@ -52,6 +52,7 @@ function startQuiz(){
 }
 
 function showQuestion(){
+    resetState();
     let currentQues = questions[currentQuesIndx];
     let questionNo = currentQuesIndx + 1;
     questionElm.innerHTML = questionNo + ". " + currentQues.question;
@@ -61,7 +62,60 @@ function showQuestion(){
         btn.innerHTML = answer.text;
         btn.classList.add("btn");
         answerBtn.appendChild(btn);
+        if(answer.correct){
+            btn.dataset.correct = answer.correct;
+        }
+        btn.addEventListener("click", selectAnswer);
     });
 }
+
+function resetState(){
+    nextBtn.style.display = "none";
+    while(answerBtn.firstChild){
+        answerBtn.removeChild(answerBtn.firstChild);
+    }
+}
+
+function selectAnswer(e){
+    const selectBtn = e.target;
+    const isCorrect = selectBtn.dataset.correct === "true";
+    if(isCorrect){
+        selectBtn.classList.add("correct");
+        score++;
+    }else{
+        selectBtn.classList.add("incorrect");
+    }
+    Array.from(answerBtn.children).forEach(btn => {
+        if(btn.dataset.correct === "true"){
+            btn.classList.add("correct");
+        }
+        btn.disabled = true;
+    });
+    nextBtn.style.display = "block";
+}
+
+function showScore(){
+    resetState();
+    questionElm.innerHTML = "You scored " + score + " out of " + questions.length + "!";
+    nextBtn.innerHTML = "Play Again";
+    nextBtn.style.display = "block";
+}
+
+function handleNextButton(){
+    currentQuesIndx++;
+    if(currentQuesIndx < questions.length){
+        showQuestion();
+    }else{
+        showScore();
+    }
+}
+
+nextBtn.addEventListener("click", ()=>{
+    if(currentQuesIndx < questions.length){
+        handleNextButton();
+    }else{
+        startQuiz();
+    }
+});
 
 startQuiz();
