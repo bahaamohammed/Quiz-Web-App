@@ -45,4 +45,4 @@ This is a basic quiz web application developed using HTML5, CSS3, and JavaScript
 
 1. Clone the repository.
    ```bash
-   git clone https://github.com/your-username/quiz-web-app.git
+   git clone https://github.com/bahaamohammed/Quiz-Web-App.git
